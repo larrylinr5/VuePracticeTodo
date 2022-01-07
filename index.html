@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vue_Todo(六角學院的練習題)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="images/favicon.ico" rel="shortcut icon">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/stylesheets/all.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/regular.js" integrity="sha384-t7yHmUlwFrLxHXNLstawVRBMeSLcXTbQ5hsd0ifzwGtN7ZF7RZ8ppM7Ldinuoiif" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>    
+    <script src="/javascripts/vendor.js"></script>
+</head>
+    <body class="bg-lighter">
+        <div class="container my-5">
+            <div class="row">
+                <div class="col post">
+                    <!-- 練習開始 -->
+                    <h1 class="mt-0 text-muted">Vue_Todo</h1>
+
+                    <div id="app">
+                        <!-- #region 待辦事項輸入區-->
+                        <div class="input-group mb-3">
+                            <!-- 代辦事項標籤 -->
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">待辦事項</span>
+                            </div>
+                            <!-- 代辦事項輸入區 -->
+                            <input type="text" class="form-control" placeholder="準備要做的任務" v-model="newTodo" @keyup.Enter="addTodo">
+                            <!-- 代辦事項新增按鈕 -->
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" @click="addTodo">新增</button>
+                            </div>
+                        </div>
+                        <!-- #endregion -->
+
+                        <!-- #region Todo渲染區-->
+                        <div class="card text-center">
+                            <!-- card的header -->
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link" :class="{active:visibility==='all'}" @click="visibility='all'" href="#">全部</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" :class="{active:visibility==='active'}" @click="visibility='active'" href="#">進行中</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" :class="{active:visibility==='completed'}" @click="visibility='completed'" href="#">已完成</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- card的body -->
+                            <ul class="list-group list-group-flush text-left">
+                                <li class="list-group-item" v-for="(item,key) in filteredTodos" @dblclick="editTodo(item)">
+                                    <div class="d-flex" v-if="item.id !== cacheTodo.id">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" v-model="item.completed" :id="item.id">
+                                            <label class="form-check-label" 
+                                            :class="{completed:item.completed}"
+                                            :for="item.id">
+                                            {{ item.title }}
+                                            </label>
+                                        </div>
+                                        <button type="button" class="close ml-auto" @click="removeTodo(item)" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" 
+                                        v-model="cacheTitle"
+                                        @keyup.esc="cencleEdit()"
+                                        @keyup.enter="doneEdit(item)"
+                                        v-if="item.id === cacheTodo.id">
+                                </li>
+                            </ul>
+                            <!-- card的footer -->
+                            <div class="card-footer d-flex justify-content-between">
+                                <span>還有 {{caculateTodoLength}} 筆任務未完成</span>
+                                <a href="#" @click="clearTodo()">清除所有任務</a>
+                            </div>
+                        </div>
+                        <!-- #endregion -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- #region js區塊 -->
+        <script src="all.js"></script>
+        <!-- #endregion -->
+
+        <!-- #region CSS區塊 -->
+        <style>
+            .completed {
+                text-decoration: line-through
+            }
+        </style>
+        <!-- #endregion -->
+    </body>
+</html>
